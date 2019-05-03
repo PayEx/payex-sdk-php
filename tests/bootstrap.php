@@ -3,9 +3,14 @@
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 	require_once __DIR__ . '/../vendor/autoload.php';
 } else {
-	require_once __DIR__ . '/../src/PayEx/Api/Exception.php';
-	require_once __DIR__ . '/../src/PayEx/Api/Response.php';
-	require_once __DIR__ . '/../src/PayEx/Api/Client.php';
+    $dir      = new RecursiveDirectoryIterator(__DIR__ . '/../src/PayEx/Api');
+    $iterator = new RecursiveIteratorIterator($dir);
+    foreach ($iterator as $file) {
+        $fileName = $file->getFilename();
+        if (preg_match('%\.php$%', $fileName)) {
+            require_once($file->getPathname());
+        }
+    }
 }
 
 require_once __DIR__ . '/TestCase.php';
